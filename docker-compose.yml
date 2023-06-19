@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  broker_service:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: medii_broker:1.0
+    expose:
+      - 8080
+    container_name: medii_broker
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    networks:
+      - brokernet
+    volumes:
+      - ./Logs:/app/Logs
+
+networks:
+  brokernet:
