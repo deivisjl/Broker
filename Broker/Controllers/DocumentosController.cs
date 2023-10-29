@@ -183,7 +183,7 @@ namespace Broker.Controllers
         }
 
         [HttpPost("/api/Documents/LogProvider/{name}")]
-        public async Task<IActionResult> LogProvider(string name)
+        public async Task<IActionResult> LogProvider(string name, [FromBody] string log)
         {
             StreamWriter logFile;
             string description;
@@ -204,15 +204,7 @@ namespace Broker.Controllers
 
                 req = Request;
 
-                if (!req.Body.CanSeek)
-                {
-                    req.EnableBuffering();
-                }
-
-                using (StreamReader reader = new StreamReader(req.Body, Encoding.UTF8))
-                {
-                    description = await reader.ReadToEndAsync();
-                }
+                description = log;
 
                 if (System.IO.File.Exists(currentFile))
                 {
