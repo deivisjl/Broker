@@ -209,13 +209,11 @@ namespace Broker.Controllers
                     req.EnableBuffering();
                 }
 
-                /*var stream = req.ContentLength.ToString();
-                var originalReader = new StreamReader(stream);
-                var originalContent = await originalReader.ReadToEndAsync();
-
-                description = originalContent.ToString();*/
-
-                description = req.ContentLength.ToString();
+                using (var reader = new StreamReader(req.Body))
+                {
+                    string value = await reader.ReadToEndAsync();
+                    description = value;
+                }
 
                 if (System.IO.File.Exists(currentFile))
                 {
