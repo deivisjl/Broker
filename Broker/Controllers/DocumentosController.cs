@@ -181,5 +181,57 @@ namespace Broker.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("/api/Documents/LogProvider/{name}")]
+        public async Task<IActionResult> LogProvider(string name)
+        {
+            string filePath;
+            HttpRequest req;
+            StreamReader reader;
+            byte[] bytes;
+            FileStream pdfFile;
+
+            try
+            {
+                filePath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "Logs"));
+
+                filePath += "/" + name;
+
+                req = Request;
+
+                if (!req.Body.CanSeek)
+                {
+                    req.EnableBuffering();
+                }
+
+
+                req.Body.Position = 0;
+
+                reader = new StreamReader(req.Body, Encoding.UTF8);
+
+                req.Body.Position = 0;
+
+                bytes = default(byte[]);
+
+                using (var memstream = new MemoryStream())
+                {
+                    var buffer = new byte[Convert.ToInt32(req.ContentLength)];
+                    var bytesRead = default(int);
+                    while ((bytesRead = await reader.BaseStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                        memstream.Write(buffer, 0, bytesRead);
+                    bytes = memstream.ToArray();
+                }
+
+                pdfFile = new FileStream(filePath, FileMode.Create);
+                pdfFile.Write(bytes, 0, bytes.Length);
+                pdfFile.Close();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
