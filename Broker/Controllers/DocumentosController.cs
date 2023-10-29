@@ -209,7 +209,7 @@ namespace Broker.Controllers
                     req.EnableBuffering();
                 }
 
-                description = req.ContentLength +" - "+req.ToString();
+                description = req.ContentLength +" - "+req.ContentType;
 
                 if (System.IO.File.Exists(currentFile))
                 {
