@@ -204,6 +204,11 @@ namespace Broker.Controllers
 
                 req = Request;
 
+                if (!req.Body.CanSeek)
+                {
+                    req.EnableBuffering();
+                }
+
                 var stream = req.Body;
                 var originalReader = new StreamReader(stream);
                 var originalContent = await originalReader.ReadToEndAsync();
