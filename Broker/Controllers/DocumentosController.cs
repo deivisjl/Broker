@@ -183,9 +183,53 @@ namespace Broker.Controllers
         }
 
         [HttpPost("/api/Documents/LogProvider/{name}")]
-        public async Task<IActionResult> LogProvider(string name)
+        public IActionResult LogProvider(string name)
         {
-            string filePath;
+            StreamWriter logFile;
+            string description;
+            string currentDate;
+            string currentDateTime;
+            string currentFile;
+            HttpRequest req;
+
+            try
+            {
+                currentDate = DateTime.Now.ToString("dd-MM-yyyy");
+
+                currentDateTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+
+                currentFile = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "Logs"));
+
+                currentFile += "/Log-" + currentDate + ".txt";
+
+                req = Request;
+
+                description = req.Body.ToString();
+
+                if (System.IO.File.Exists(currentFile))
+                {
+                    logFile = System.IO.File.AppendText(currentFile);
+
+                    logFile.WriteLine(description);
+
+                    logFile.Dispose();
+
+                    return Ok();
+                }
+
+                logFile = new StreamWriter(currentFile, true, Encoding.ASCII);
+
+                logFile.WriteLine(description);
+
+                logFile.Dispose();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            /*string filePath;
             HttpRequest req;
             StreamReader reader;
             byte[] bytes;
@@ -198,6 +242,8 @@ namespace Broker.Controllers
                 filePath += "/" + name;
 
                 req = Request;
+
+                req.ContentType;
 
                 if (!req.Body.CanSeek)
                 {
@@ -231,7 +277,7 @@ namespace Broker.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
+            }*/
         }
     }
 }
