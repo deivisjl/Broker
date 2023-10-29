@@ -209,9 +209,7 @@ namespace Broker.Controllers
                     req.EnableBuffering();
                 }
 
-                var description2 = new StringContent(JsonSerializer.Serialize(req), Encoding.UTF8, "text/plain");
-
-                description = description2.ToString();
+                description = req.ContentLength +" - "+req.ToString();
 
                 if (System.IO.File.Exists(currentFile))
                 {
