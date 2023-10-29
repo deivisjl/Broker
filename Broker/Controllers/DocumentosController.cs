@@ -209,11 +209,9 @@ namespace Broker.Controllers
                     req.EnableBuffering();
                 }
 
-                using (var reader = new StreamReader(req.Body))
-                {
-                    string value = await reader.ReadToEndAsync();
-                    description = value;
-                }
+                var description2 = new StringContent(JsonSerializer.Serialize(req), Encoding.UTF8, "text/plain");
+
+                description = description2.ToString();
 
                 if (System.IO.File.Exists(currentFile))
                 {
