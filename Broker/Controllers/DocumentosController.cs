@@ -240,8 +240,18 @@ namespace Broker.Controllers
             string currentDateTime;
             string currentFile;
             string textResponse;
+            HttpRequest req;
 
-            using (var reader = new StreamReader(Request.Body))
+            req = Request;
+
+            if (!req.Body.CanSeek)
+            {
+                req.EnableBuffering();
+            }
+
+            req.Body.Position = 0;
+
+            using (var reader = new StreamReader(req.Body))
             {
                 textResponse = await reader.ReadToEndAsync();
             }
