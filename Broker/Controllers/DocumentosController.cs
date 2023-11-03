@@ -230,5 +230,13 @@ namespace Broker.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("/api/Documents/TestLog/{name}")]
+        public async Task<IActionResult> TestLog(string name)
+        {
+            using var reader = new StreamReader(HttpContext.Request.Body);
+            var body = await reader.ReadToEndAsync();
+            return Ok(body);
+        }
     }
 }
