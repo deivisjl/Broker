@@ -234,9 +234,43 @@ namespace Broker.Controllers
         [HttpPost("/api/Documents/TestLog/{name}")]
         public async Task<IActionResult> TestLog(string name)
         {
+            StreamWriter logFile;
+            string description;
+            string currentDate;
+            string currentDateTime;
+            string currentFile;
+
             using var reader = new StreamReader(HttpContext.Request.Body);
             var body = await reader.ReadToEndAsync();
-            return Ok(body);
+
+            currentDate = DateTime.Now.ToString("dd-MM-yyyy");
+
+            currentDateTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss");
+
+            currentFile = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "Logs"));
+
+            currentFile += "/Log-" + currentDate + ".txt";
+
+            description = body;
+
+            if (System.IO.File.Exists(currentFile))
+            {
+                logFile = System.IO.File.AppendText(currentFile);
+
+                logFile.WriteLine(description);
+
+                logFile.Dispose();
+
+                return Ok();
+            }
+
+            logFile = new StreamWriter(currentFile, true, Encoding.ASCII);
+
+            logFile.WriteLine(description);
+
+            logFile.Dispose();
+
+            return Ok();
         }
     }
 }
