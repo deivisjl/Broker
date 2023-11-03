@@ -174,7 +174,7 @@ namespace Broker.Controllers
                     }
                 }
 
-                return Ok(JsonSerializer.Serialize(list));
+                return Ok(System.Text.Json.JsonSerializer.Serialize(list));
             }
             catch (Exception ex)
             {
@@ -239,9 +239,12 @@ namespace Broker.Controllers
             string currentDate;
             string currentDateTime;
             string currentFile;
+            string textResponse;
 
-            using var reader = new StreamReader(HttpContext.Request.Body);
-            var body = await reader.ReadToEndAsync();
+            using (var reader = new StreamReader(Request.Body))
+            {
+                textResponse = await reader.ReadToEndAsync();
+            }
 
             currentDate = DateTime.Now.ToString("dd-MM-yyyy");
 
@@ -251,7 +254,7 @@ namespace Broker.Controllers
 
             currentFile += "/Log-" + currentDate + ".txt";
 
-            description = body;
+            description = string.Format(@"Fecha de registro: {0}, Nombre de documento: {1}, Respuesta: {2}", currentDateTime, name, textResponse);
 
             if (System.IO.File.Exists(currentFile))
             {
