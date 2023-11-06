@@ -251,9 +251,10 @@ namespace Broker.Controllers
 
             req.Body.Position = 0;
 
-            using (var reader = new StreamReader(req.Body))
+            using (var reader = new StreamReader(req.Body, Encoding.UTF8))
             {
-                textResponse = await reader.ReadToEndAsync();
+                textResponse = await reader.ReadToEndAsync().ConfigureAwait(false);
+                req.Body.Position = 0;
             }
 
             currentDate = DateTime.Now.ToString("dd-MM-yyyy");
@@ -264,7 +265,7 @@ namespace Broker.Controllers
 
             currentFile += "/Log-" + currentDate + ".txt";
 
-            description = string.Format(@"Fecha de registro: {0}, Nombre de documento: {1}, Respuesta: {2}", currentDateTime, name, textResponse);
+            description = string.Format(@"Fecha de registro: {0}, Nombre de documento: {1}, Respuesta: [{2}]", currentDateTime, name, textResponse);
 
             if (System.IO.File.Exists(currentFile))
             {
