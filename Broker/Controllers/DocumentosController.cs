@@ -232,30 +232,14 @@ namespace Broker.Controllers
         }
 
         [HttpPost("/api/Documents/TestLog/{name}")]
-        public async Task<IActionResult> TestLog(string name)
+        [Consumes("text/plain")]
+        public async Task<IActionResult> TestLog(string name, [FromBody] string body)
         {
             StreamWriter logFile;
             string description;
             string currentDate;
             string currentDateTime;
             string currentFile;
-            string textResponse;
-            HttpRequest req;
-
-            req = Request;
-
-            if (!req.Body.CanSeek)
-            {
-                req.EnableBuffering();
-            }
-
-            req.Body.Position = 0;
-
-            using (var reader = new StreamReader(req.Body, Encoding.UTF8))
-            {
-                textResponse = await reader.ReadToEndAsync().ConfigureAwait(false);
-                req.Body.Position = 0;
-            }
 
             currentDate = DateTime.Now.ToString("dd-MM-yyyy");
 
@@ -265,7 +249,7 @@ namespace Broker.Controllers
 
             currentFile += "/Log-" + currentDate + ".txt";
 
-            description = string.Format(@"Fecha de registro: {0}, Nombre de documento: {1}, Respuesta: [{2}]", currentDateTime, name, textResponse);
+            description = string.Format(@"Fecha de registro: {0}, Nombre de documento: {1}, Respuesta: [{2}]", currentDateTime, name, body);
 
             if (System.IO.File.Exists(currentFile))
             {
