@@ -27,11 +27,11 @@ namespace Broker.Controllers
 
             List<string> rutasDocumento = this.AlmacenarArchivo(directorio);
 
-            string nombreArchivo = string.Format(@"\ejemplo.pdf");
+            string nombreArchivo = string.Format(@"ejemplo.pdf");
 
-            string pathDocumento = rutasDocumento.ElementAt(1) + nombreArchivo;
+            string pathDocumento = Path.Combine(rutasDocumento.ElementAt(1), nombreArchivo);
 
-            string pathWindows = rutasDocumento.ElementAt(0) + nombreArchivo;
+            string pathWindows = Path.Combine(rutasDocumento.ElementAt(0), nombreArchivo);
 
             byte[] bytesArchivo = Convert.FromBase64String(archivo);
 
@@ -54,7 +54,7 @@ namespace Broker.Controllers
 
             year = DateTime.Now.Year.ToString();
 
-            nombreArchivo = string.Format(@"\IVS-NOMINAS\{0}\{1}", nombreDirectorio, year);
+            nombreArchivo = string.Format(@"IVS-NOMINAS\{0}\{1}", nombreDirectorio, year);
 
             rutaAlmacenamiento = this.RutasAlmacenado(nombreArchivo);
 
