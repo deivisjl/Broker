@@ -54,7 +54,7 @@ namespace Broker.Controllers
 
             year = DateTime.Now.Year.ToString();
 
-            nombreArchivo = string.Format(@"IVS-NOMINAS\{0}\{1}", nombreDirectorio, year);
+            nombreArchivo = string.Format(@"\IVS-NOMINAS\{0}\{1}", nombreDirectorio, year);
 
             rutaAlmacenamiento = this.RutasAlmacenado(nombreArchivo);
 
