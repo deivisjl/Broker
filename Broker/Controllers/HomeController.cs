@@ -56,7 +56,7 @@ namespace Broker.Controllers
 
             nombreArchivo = Path.Combine("IVS-NOMINAS", nombreDirectorio);
 
-            nombreArchivo += Path.Combine(nombreArchivo,year);
+            nombreArchivo = Path.Combine(nombreArchivo,year);
 
             rutaAlmacenamiento = this.RutasAlmacenado(nombreArchivo);
 
