@@ -111,12 +111,12 @@ namespace Broker.Controllers
 
         public string GetWindowSetting(string settingKey)
         {
-            return "/sirrhh";
+            return Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "Logs")) + "/sirrhh";
         }
 
         public string GetLinuxSetting(string settingKey)
         {
-            return "/sirrhh";
+            return Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "Logs")) + "/sirrhh";
         }
     }
 }
